@@ -1,12 +1,12 @@
 import React from 'react'
 import { FaRobot } from "react-icons/fa";
 import { IoSparkles } from "react-icons/io5";
-import { motion } from "motion/react"
 import { FcGoogle } from "react-icons/fc";
 import { signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '../utils/Firebase';
 import { ServerURL } from '../App';
 import axios from 'axios';
+import { motion } from "motion/react"
 import { useDispatch } from 'react-redux';
 import { setUserData } from '../redux/userSlice';
 
