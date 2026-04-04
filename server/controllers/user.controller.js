@@ -1,11 +1,11 @@
-import User from "../model/userModel.js"
+import {finduserById} from "../services/user.service.js";
 
 
 export const getCurrentUser = async (req,res) => {
 try {
     // user ki id nikal ke user ki details nikalenge
     const userId = req.userId
-    const user = await User.findById(userId)
+    const user = await finduserById(userId);
     if(!user){
         return res.status(404).json({
             message:"User not found"

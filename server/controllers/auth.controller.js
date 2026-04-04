@@ -1,4 +1,4 @@
-import User from "../model/userModel.js";
+import {findUser, createUser} from "../services/user.service.js";
 
 
 
@@ -12,13 +12,13 @@ export const GoogleAuth = async (req,res) => {
 
         const {name,email} = req.body;
         // check if user already exists
-        let user = await User.findOne({email})
+        let user = await findUser({email})
         // if user doesn't exist create a new user
         if(!user){
-            user = await User.create({name,email})
+            user = await createUser({name,email})
         }
         // generate token
-        let token = await genToken(user._id)
+        let token = await genToken(user?.data?._id)
        res.cookie("token", token, {
     httpOnly: true,   // ✅ correct
     secure: false,
