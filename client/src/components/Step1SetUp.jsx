@@ -36,6 +36,7 @@ function Step1SetUp({ onStart }) {
 
         try {
             const result = await axios.post(ServerURL + "/api/interview/resume", formdata, { withCredentials: true })
+            console.info("🚀 ~ handleUploadResume ~ result:", result)
 
             console.log(result.data)
 
@@ -57,7 +58,8 @@ function Step1SetUp({ onStart }) {
     const handleStart = async () => {
         setLoading(true)
         try {
-           const result = await axios.post(ServerURL + "/api/interview/generate-questions" , {role, experience, mode , resumeText, projects, skills } , {withCredentials:true}) 
+            console.log("<><>><><>",role)
+           const result = await axios.post(ServerURL +"/api/interview/generate" , {role, experience, mode: mode.toLowerCase(), resumeText, projects, skills } , {withCredentials:true}) 
            console.log(result.data)
            if(userData){
             dispatch(setUserData({...userData , credits:result.data.creditsLeft}))
@@ -70,6 +72,15 @@ function Step1SetUp({ onStart }) {
             setLoading(false)
         }
     }
+    console.log({ role, experience, mode });
+    console.log({
+  role,
+  experience,
+  mode: mode.toLowerCase(),
+  resumeText,
+  projects,
+  skills
+});
     return (
         <motion.div
             initial={{ opacity: 0 }}

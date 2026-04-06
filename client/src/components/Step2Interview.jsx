@@ -25,6 +25,7 @@ function Step2Interview({ interviewData, onFinish }) {
   const [timeLeft, setTimeLeft] = useState(
     questions[0]?.timeLimit || 60
   );
+  const [followUp, setFollowUp] = useState("");
   const [selectedVoice, setSelectedVoice] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [voiceGender, setVoiceGender] = useState("female");
@@ -246,31 +247,50 @@ function Step2Interview({ interviewData, onFinish }) {
 
 
   const submitAnswer = async () => {
-    if (isSubmitting) return;
-    stopMic()
-    setIsSubmitting(true)
+  if (isSubmitting) return;
+  stopMic();
+  setIsSubmitting(true);
 
-    try {
-      const result = await axios.post(ServerUrl + "/api/interview/submit-answer", {
+  try {
+    const result = await axios.post(
+      ServerURL + "/api/interview/submit",
+      {
         interviewId,
         questionIndex: currentIndex,
         answer,
-        timeTaken:
-          currentQuestion.timeLimit - timeLeft,
-      } , {withCredentials:true})
+        timeTaken: currentQuestion.timeLimit - timeLeft,
+      },
+      { withCredentials: true }
+    );
 
-      setFeedback(result.data.feedback)
-      speakText(result.data.feedback)
-      setIsSubmitting(false)
-    } catch (error) {
-console.log(error)
-setIsSubmitting(false)
+    // ✅ store data
+    setFeedback(result.data.feedback);
+    setFollowUp(result.data.followUp || "");
+
+    console.log("FOLLOW UP:", result.data.followUp);
+
+    // ✅ speak feedback
+    if (result.data.feedback) {
+      await speakText(result.data.feedback);
     }
+
+    // ✅ speak follow-up
+    if (result.data.followUp) {
+      await speakText(result.data.followUp);
+    }
+
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setIsSubmitting(false);
   }
+};
+
 
   const handleNext =async () => {
     setAnswer("");
     setFeedback("");
+    setFollowUp("");
 
     if (currentIndex + 1 >= questions.length) {
       finishInterview();
@@ -291,7 +311,7 @@ setIsSubmitting(false)
     stopMic()
     setIsMicOn(false)
     try {
-      const result = await axios.post(ServerUrl+ "/api/interview/finish" , { interviewId} , {withCredentials:true})
+      const result = await axios.post(ServerURL+ "/api/interview/finish" , { interviewId} , {withCredentials:true})
 
       console.log(result.data)
       onFinish(result.data)
@@ -435,6 +455,11 @@ setIsSubmitting(false)
               animate={{ opacity: 1 }}
             className='mt-6 bg-emerald-50 border border-emerald-200 p-5 rounded-2xl shadow-sm'>
               <p className='text-emerald-700 font-medium mb-4'>{feedback}</p>
+              {followUp && (
+  <p className='text-gray-700 mt-2 text-sm'>
+    👉 Follow-up: {followUp}
+  </p>
+)}
 
               <button
               onClick={handleNext}

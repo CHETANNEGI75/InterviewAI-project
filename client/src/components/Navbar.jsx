@@ -5,6 +5,7 @@ import { BsRobot, BsCoin } from "react-icons/bs";
 import { HiOutlineLogout } from "react-icons/hi";
 import { FaUserAstronaut } from "react-icons/fa";
 import { useState } from 'react';
+import { ServerURL } from '../App';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { setUserData } from '../redux/userSlice';
@@ -19,7 +20,7 @@ function Navbar() {
 
     const handleLogout = async () => {
         try {
-            await axios.get(ServerUrl + "/api/auth/logout" , {withCredentials:true})
+            await axios.get(ServerURL + "/api/auth/logout" , {withCredentials:true})
             dispatch(setUserData(null))
             setShowCreditPopup(false)
             setShowUserPopup(false)
@@ -77,7 +78,11 @@ function Navbar() {
                         setShowUserPopup(!showUserPopup);
                         setShowCreditPopup(false)
                     }} className='w-9 h-9 bg-black text-white rounded-full flex items-center justify-center font-semibold'>
-                        {userData ? userData?.name.slice(0,1).toUpperCase() : <FaUserAstronaut size={16}/>}
+                        {
+  userData && userData.name
+    ? userData.name.slice(0,1).toUpperCase()
+    : <FaUserAstronaut size={16}/>
+}
                         
                     </button>
 

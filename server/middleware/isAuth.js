@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 //token mai se user ki id nikal ke user ko authenticate karne wala middleware
 const isAuth= async (req,res,next)=>{
     try {
+        console.log("Cookies:", req.cookies);
         let {token} = req.cookies
         if(!token){
             return res.status(400).json({
