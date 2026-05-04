@@ -11,7 +11,7 @@ import Pricing from './pages/Pricing'
 import InterviewReport from './pages/InterviewReport'
 
 
-export const ServerURL = "http://localhost:3000" // Replace with your server URL
+export const ServerURL = import.meta.env.VITE_API_URL || "http://localhost:3000"
 const App = () => {
   const dispatch = useDispatch()
   useEffect(()=>{
