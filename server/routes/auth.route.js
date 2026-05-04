@@ -6,6 +6,6 @@ import { GoogleAuth, logOut } from "../controllers/auth.controller.js";
 const authRouter = express.Router()
 // Google authentication route
     authRouter.post("/google",GoogleAuth)
-    authRouter.post("/logout",logOut)
+    authRouter.get("/logout",logOut)
 
     export default authRouter;
