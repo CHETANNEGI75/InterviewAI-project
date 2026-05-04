@@ -20,9 +20,9 @@ export const GoogleAuth = async (req,res) => {
         // generate token
         let token = await genToken(user?.data?._id)
        res.cookie("token", token, {
-    httpOnly: true,   // ✅ correct
-    secure: false,
-    sameSite: "lax",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000
 });
 
